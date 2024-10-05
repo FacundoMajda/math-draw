@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { Toaster, toast } from "sonner";
+
 const SWATCHES = [
   "#000000", // black
   "#ffffff", // white
@@ -49,6 +51,7 @@ const App = () => {
       setCalculationResult(null);
       setVariableStorage({});
       setShouldReset(false);
+      toast.info("Dibujo borrado");
     }
   }, [shouldReset]);
 
@@ -115,6 +118,11 @@ const App = () => {
         setIsDrawing(true);
       }
     }
+  };
+
+  const changeBrushColor = (color) => {
+    setBrushColor(color);
+    toast.info(`Color del pincel cambiado a: ${color}`);
   };
 
   const draw = (event) => {
@@ -195,8 +203,10 @@ const App = () => {
             });
           }, 1000);
         });
+        toast.success("Dibujo procesado correctamente");
       } catch (error) {
-        console.error("Error processing drawing:", error);
+        console.error("Error procesando el dibujo: ", error.message);
+        toast.error("Error procesando el dibujo");
       }
     }
   };
@@ -251,10 +261,11 @@ const App = () => {
 
   return (
     <div className="relative w-full h-screen">
+      <Toaster position="bottom-center" richColors />
       <div className="grid grid-cols-3 gap-2 absolute top-0 left-0 right-0 z-10 bg-gray-800 p-2">
         <button
           onClick={() => setShouldReset(true)}
-          className="bg-red-500 text-white px-4 py-2 rounded"
+          className="bg-transparent hover:bg-red-500 text-red-500 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded transition-all duration-500 ease-in-out"
         >
           Reset
         </button>
@@ -262,15 +273,15 @@ const App = () => {
           {SWATCHES.map((swatch) => (
             <button
               key={swatch}
-              className="w-8 h-8 rounded-full border-2 border-white"
+              className="w-8 h-8 rounded-full border-2 border-white hover:border-transparent transition-all duration-500 ease-in-out transform hover:scale-125"
               style={{ backgroundColor: swatch }}
-              onClick={() => setBrushColor(swatch)}
+              onClick={() => changeBrushColor(swatch)}
             />
           ))}
         </div>
         <button
           onClick={processDrawing}
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          className="bg-transparent hover:bg-green-500 text-green-500 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded transition-all duration-500 ease-in-out"
         >
           Process
         </button>

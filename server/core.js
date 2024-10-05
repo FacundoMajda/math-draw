@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import sharp from "sharp";
 import "dotenv/config";
-import { derivative, simplify } from "mathjs";
+// import { derivative, simplify } from "mathjs";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genai = new GoogleGenerativeAI(GEMINI_API_KEY);

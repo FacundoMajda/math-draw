@@ -21,7 +21,7 @@ PEMDAS significa el Orden de Prioridad: Paréntesis, Exponentes, Multiplicación
 1. **Expresiones matemáticas simples**:
    Ejemplos:
    - 2 + 3 * 4 - (5 + 1)
-     Respuesta: [{"expr": "2 + 3 * 4 - (5 + 1)", "result": 9}]
+     Respuesta: [{"expr": "2 + 3 * 4 - (5 + 1)", "result": 8}]
    - 8 / 2 + 5^2 - 3 * 4
      Respuesta: [{"expr": "8 / 2 + 5^2 - 3 * 4", "result": 17}]
    - (10 - 2) * 3 + 15 / 3
@@ -76,21 +76,19 @@ PEMDAS significa el Orden de Prioridad: Paréntesis, Exponentes, Multiplicación
    - d/dx(5/(2x)^3)
      Respuesta: [{"expr": "d/dx(5/(2x)^3)", "result": "-15/(8x^4)"}]
    - d/dx(x^3/5 + 2/x^4)
-     Respuesta: [{"expr": "d/dx(x^3/5 + 2/x^4)", "result": "3x^2/5 - 8/x^5"}]
+     Respuesta: [{"expr": "d/dx(x^3/5 + 2/x^4)", "result": "(3*x^7-40)/(5*x^5)"}]
    - d/dx((2x^2 - 3x + 1)/x)
-     Respuesta: [{"expr": "d/dx((2x^2 - 3x + 1)/x)", "result": "(2x^2 - 1)/x^2"}]
+     Respuesta: [{"expr": "d/dx((2x^2 - 3x + 1)/x)", "result": "(2x^2-1)/(x^2)"}]
 
   b) Funciones con raíces y exponenciales:
    - d/dx(√(2x))
      Respuesta: [{"expr": "d/dx(√(2x))", "result": "1/√x"}]
    - d/dx(x·2^x)
-     Respuesta: [{"expr": "d/dx(x·2^x)", "result": "2^x(1 + x·ln2)"}]
+     Respuesta: [{"expr": "d/dx(x·2^x)", "result": "2^x(1 + x·ln(2))"}]
    - d/dx(xe^x)
      Respuesta: [{"expr": "d/dx(xe^x)", "result": "e^x(1 + x)"}]
    - d/dx(√(3x))
      Respuesta: [{"expr": "d/dx(√(3x))", "result": "1/(2√(3x))"}]
-   - d/dx(∛x + ∜x)
-     Respuesta: [{"expr": "d/dx(∛x + ∜x)", "result": "1/(3x^(2/3)) + 1/(4x^(3/4))"}]
 
   c) Funciones trigonométricas y sus inversas:
    - d/dx(tg^2·x^2)
@@ -113,7 +111,7 @@ PEMDAS significa el Orden de Prioridad: Paréntesis, Exponentes, Multiplicación
      Respuesta: [{"expr": "d/dx(1/(x√x))", "result": "-3/(2x^2√x)"}]
    - d/dx((x^3 + 3x^2 - 5x + 3)/x)
      Respuesta: [{"expr": "d/dx((x^3 + 3x^2 - 5x + 3)/x)", "result": "(2x^2 + 3x - 3)/x^2"}]
-   - d/dx(√(x^2 + 1)/(√x^2 - 1))
+   - d/dx(√(x^2 + 1)/(√(x^2 - 1)))
      Respuesta: [{"expr": "d/dx(√(x^2 + 1)/(√x^2 - 1))", "result": "-2x/((x^2+1)(x^2-1)^(3/2))"}]
 
   f) Funciones exponenciales y logarítmicas:

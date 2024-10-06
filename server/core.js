@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import sharp from "sharp";
 import "dotenv/config";
+import sharp from "sharp";
 // import { derivative, simplify } from "mathjs";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -10,25 +10,90 @@ export async function analyzeImage(imageBuffer, dictOfVars) {
   const model = genai.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const dictOfVarsStr = JSON.stringify(dictOfVars);
-  const prompt = `You have been given an image with some mathematical expressions, equations, or graphical problems, and you need to solve them. 
-    Note: Use the PEMDAS rule for solving mathematical expressions. PEMDAS stands for the Priority Order: Parentheses, Exponents, Multiplication and Division (from left to right), Addition and Subtraction (from left to right). Parentheses have the highest priority, followed by Exponents, then Multiplication and Division, and lastly Addition and Subtraction. 
-    For example: 
-    Q. 2 + 3 * 4 
-    (3 * 4) => 12, 2 + 12 = 14. 
-    Q. 2 + 3 + 5 * 4 - 8 / 2 
-    5 * 4 => 20, 8 / 2 => 4, 2 + 3 => 5, 5 + 20 => 25, 25 - 4 => 21. 
-    YOU CAN HAVE FIVE TYPES OF EQUATIONS/EXPRESSIONS IN THIS IMAGE, AND ONLY ONE CASE SHALL APPLY EVERY TIME: 
-    Following are the cases: 
-    1. Simple mathematical expressions like 2 + 2, 3 * 4, 5 / 6, 7 - 8, etc.: In this case, solve and return the answer in the format of a LIST OF ONE DICT [{"expr": given expression, "result": calculated answer}]. 
-    2. Set of Equations like x^2 + 2x + 1 = 0, 3y + 4x = 0, 5x^2 + 6y + 7 = 12, etc.: In this case, solve for the given variable, and the format should be a COMMA SEPARATED LIST OF DICTS, with dict 1 as {"expr": "x", "result": 2, "assign": true} and dict 2 as {"expr": "y", "result": 5, "assign": true}. This example assumes x was calculated as 2, and y as 5. Include as many dicts as there are variables. 
-    3. Assigning values to variables like x = 4, y = 5, z = 6, etc.: In this case, assign values to variables and return another key in the dict called {"assign": true}, keeping the variable as 'expr' and the value as 'result' in the original dictionary. RETURN AS A LIST OF DICTS. 
-    4. Analyzing Graphical Math problems, which are word problems represented in drawing form, such as cars colliding, trigonometric problems, problems on the Pythagorean theorem, adding runs from a cricket wagon wheel, etc. These will have a drawing representing some scenario and accompanying information with the image. PAY CLOSE ATTENTION TO DIFFERENT COLORS FOR THESE PROBLEMS. You need to return the answer in the format of a LIST OF ONE DICT [{"expr": given expression, "result": calculated answer}]. 
-    5. Detecting Abstract Concepts that a drawing might show, such as love, hate, jealousy, patriotism, or a historic reference to war, invention, discovery, quote, etc. USE THE SAME FORMAT AS OTHERS TO RETURN THE ANSWER, where 'expr' will be the explanation of the drawing, and 'result' will be the abstract concept. 
-    Analyze the equation or expression in this image and return the answer according to the given rules: 
-    Make sure to use extra backslashes for escape characters like \\f -> \\\\f, \\n -> \\\\n, etc. 
-    Here is a dictionary of user-assigned variables. If the given expression has any of these variables, use its actual value from this dictionary accordingly: ${dictOfVarsStr}. 
-    DO NOT USE BACKTICKS OR MARKDOWN FORMATTING. 
-    PROPERLY QUOTE THE KEYS AND VALUES IN THE DICTIONARY FOR EASIER PARSING WITH JavaScript's JSON.parse.`;
+  const prompt = `
+Se te ha dado una imagen con algunas expresiones matemáticas, ecuaciones o problemas gráficos, y necesitas resolverlos.
+
+**Nota:** Usa la regla PEMDAS para resolver las expresiones matemáticas. 
+PEMDAS significa el Orden de Prioridad: Paréntesis, Exponentes, Multiplicación y División (de izquierda a derecha), Suma y Resta (de izquierda a derecha). Los paréntesis tienen la prioridad más alta, seguidos por los exponentes, luego la multiplicación y la división, y finalmente la suma y la resta, no olvides los corchetes.
+
+**PUEDES TENER SEIS TIPOS DE ECUACIONES/EXPRESIONES EN ESTA IMAGEN, Y SOLO UN CASO SE APLICARÁ CADA VEZ:**
+
+1. **Expresiones matemáticas simples**:
+   Ejemplos:
+   - 2 + 3 * 4 - (5 + 1)
+     Respuesta: [{"expr": "2 + 3 * 4 - (5 + 1)", "result": 9}]
+   - 8 / 2 + 5^2 - 3 * 4
+     Respuesta: [{"expr": "8 / 2 + 5^2 - 3 * 4", "result": 17}]
+   - (10 - 2) * 3 + 15 / 3
+     Respuesta: [{"expr": "(10 - 2) * 3 + 15 / 3", "result": 29}]
+
+2. **Conjunto de Ecuaciones**:
+   Ejemplos:
+   - x + y = 10, 2x - y = 4
+     Respuesta: [{"expr": "x", "result": 6, "assign": true}, {"expr": "y", "result": 4, "assign": true}]
+   - 3x + 2y = 14, x - y = 1
+     Respuesta: [{"expr": "x", "result": 4, "assign": true}, {"expr": "y", "result": 3, "assign": true}]
+   - x^2 + y^2 = 25, x + y = 7
+     Respuesta: [{"expr": "x", "result": 4, "assign": true}, {"expr": "y", "result": 3, "assign": true}]
+
+3. **Asignación de valores a variables**:
+   Ejemplos:
+   - a = 5, b = 3, c = a + b
+     Respuesta: [{"expr": "a", "result": 5, "assign": true}, {"expr": "b", "result": 3, "assign": true}, {"expr": "c", "result": 8, "assign": true}]
+   - x = 10, y = x / 2, z = x * y
+     Respuesta: [{"expr": "x", "result": 10, "assign": true}, {"expr": "y", "result": 5, "assign": true}, {"expr": "z", "result": 50, "assign": true}]
+   - p = 2, q = p^3, r = q - p
+     Respuesta: [{"expr": "p", "result": 2, "assign": true}, {"expr": "q", "result": 8, "assign": true}, {"expr": "r", "result": 6, "assign": true}]
+
+4. **Análisis de problemas matemáticos gráficos**:
+   Ejemplos:
+   - Un triángulo rectángulo con catetos de 3 y 4 unidades.
+     Respuesta: [{"expr": "Calcular la hipotenusa de un triángulo rectángulo con catetos de 3 y 4 unidades", "result": 5}]
+   - Un cilindro con radio 5 cm y altura 10 cm.
+     Respuesta: [{"expr": "Calcular el volumen de un cilindro con radio 5 cm y altura 10 cm", "result": "785.4 cm³"}]
+   - Una esfera inscrita en un cubo de lado 8 cm.
+     Respuesta: [{"expr": "Calcular el radio de una esfera inscrita en un cubo de lado 8 cm", "result": "4 cm"}]
+
+5. **Detección de Conceptos Abstractos**:
+   Ejemplos:
+   - Una imagen de dos manos estrechándose.
+     Respuesta: [{"expr": "Dos manos estrechándose", "result": "Cooperación"}]
+   - Una balanza equilibrada con un mazo de juez en un platillo y un libro en el otro.
+     Respuesta: [{"expr": "Balanza equilibrada con mazo de juez y libro", "result": "Justicia"}]
+   - Un foco encendido sobre una cabeza humana.
+     Respuesta: [{"expr": "Foco encendido sobre una cabeza humana", "result": "Idea o inspiración"}]
+
+6. **Derivadas y otros problemas de cálculo**:
+   Ejemplos de derivadas:
+   - d/dx(x^3 + 2x)
+     Respuesta: [{"expr": "d/dx(x^3 + 2x)", "result": "3x^2 + 2"}]
+   - d/dx(sin(x) * cos(x))
+     Respuesta: [{"expr": "d/dx(sin(x) * cos(x))", "result": "cos^2(x) - sin^2(x)"}]
+   - d/dx(e^x * ln(x))
+     Respuesta: [{"expr": "d/dx(e^x * ln(x))", "result": "e^x * (ln(x) + 1/x)"}]
+
+   Ejemplos de integrales:
+   - ∫(0 to 1) x^2 dx
+     Respuesta: [{"expr": "∫(0 to 1) x^2 dx", "result": "1/3"}]
+   - ∫ 2x * e^(x^2) dx
+     Respuesta: [{"expr": "∫ 2x * e^(x^2) dx", "result": "e^(x^2) + C"}]
+   - ∫(0 to π) sin(x) dx
+     Respuesta: [{"expr": "∫(0 to π) sin(x) dx", "result": "2"}]
+
+   Ejemplos de límites:
+   - lim(x→0) (sin(x)/x)
+     Respuesta: [{"expr": "lim(x→0) (sin(x)/x)", "result": "1"}]
+   - lim(x→∞) (1 + 1/x)^x
+     Respuesta: [{"expr": "lim(x→∞) (1 + 1/x)^x", "result": "e"}]
+   - lim(x→2) (x^2 - 4)/(x - 2)
+     Respuesta: [{"expr": "lim(x→2) (x^2 - 4)/(x - 2)", "result": "4"}]
+
+Analiza la ecuación o expresión en esta imagen y devuelve la respuesta de acuerdo a las reglas dadas:
+Asegúrate de usar barras invertidas extras para caracteres de escape como \\f -> \\\\f, \\n -> \\\\n, etc.
+Aquí tienes un diccionario de variables asignadas por el usuario. Si la expresión dada tiene alguna de estas variables, usa su valor real de este diccionario en consecuencia: ${dictOfVarsStr}.
+NO USES ACENTOS GRAVES O FORMATO DE MARKDOWN.
+CITA CORRECTAMENTE LAS CLAVES Y VALORES EN EL DICCIONARIO PARA UNA PARSING MÁS FÁCIL CON JSON.parse de JavaScript.
+`;
 
   try {
     // Convert image to PNG format (Gemini API requirement)

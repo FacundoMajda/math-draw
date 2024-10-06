@@ -64,29 +64,39 @@ PEMDAS significa el Orden de Prioridad: Paréntesis, Exponentes, Multiplicación
      Respuesta: [{"expr": "Foco encendido sobre una cabeza humana", "result": "Idea o inspiración"}]
 
 6. **Derivadas y otros problemas de cálculo**:
-   Ejemplos de derivadas:
-   - d/dx(x^3 + 2x)
-     Respuesta: [{"expr": "d/dx(x^3 + 2x)", "result": "3x^2 + 2"}]
-   - d/dx(sin(x) * cos(x))
-     Respuesta: [{"expr": "d/dx(sin(x) * cos(x))", "result": "cos^2(x) - sin^2(x)"}]
-   - d/dx(e^x * ln(x))
-     Respuesta: [{"expr": "d/dx(e^x * ln(x))", "result": "e^x * (ln(x) + 1/x)"}]
+   Ejemplos de derivadas más complejas:
 
-   Ejemplos de integrales:
-   - ∫(0 to 1) x^2 dx
-     Respuesta: [{"expr": "∫(0 to 1) x^2 dx", "result": "1/3"}]
-   - ∫ 2x * e^(x^2) dx
-     Respuesta: [{"expr": "∫ 2x * e^(x^2) dx", "result": "e^(x^2) + C"}]
-   - ∫(0 to π) sin(x) dx
-     Respuesta: [{"expr": "∫(0 to π) sin(x) dx", "result": "2"}]
+   a) Funciones racionales:
+   - d/dx(x^3/5 + 2/x^4)
+     Respuesta: [{"expr": "d/dx(x^3/5 + 2/x^4)", "result": "3x^2/5 - 8/x^5"}]
+   - d/dx((2x^2 - 3x + 1)/x)
+     Respuesta: [{"expr": "d/dx((2x^2 - 3x + 1)/x)", "result": "(2x^2 - 1)/x^2"}]
 
-   Ejemplos de límites:
-   - lim(x→0) (sin(x)/x)
-     Respuesta: [{"expr": "lim(x→0) (sin(x)/x)", "result": "1"}]
-   - lim(x→∞) (1 + 1/x)^x
-     Respuesta: [{"expr": "lim(x→∞) (1 + 1/x)^x", "result": "e"}]
-   - lim(x→2) (x^2 - 4)/(x - 2)
-     Respuesta: [{"expr": "lim(x→2) (x^2 - 4)/(x - 2)", "result": "4"}]
+   b) Funciones con raíces:
+   - d/dx(√(3x))
+     Respuesta: [{"expr": "d/dx(√(3x))", "result": "1/(2√(3x))"}]
+   - d/dx(∛x + ∜x)
+     Respuesta: [{"expr": "d/dx(∛x + ∜x)", "result": "1/(3x^(2/3)) + 1/(4x^(3/4))"}]
+
+   c) Funciones exponenciales y logarítmicas:
+   - d/dx(ln^3(x))
+     Respuesta: [{"expr": "d/dx(ln^3(x))", "result": "3ln^2(x)/x"}]
+   - d/dx(π/(5x)^2)
+     Respuesta: [{"expr": "d/dx(π/(5x)^2)", "result": "-2π/(25x^3)"}]
+
+   d) Funciones compuestas:
+   - d/dx((1 + 3x^4)^5)
+     Respuesta: [{"expr": "d/dx((1 + 3x^4)^5)", "result": "60x^3(1 + 3x^4)^4"}]
+   - d/dx(√(1 - x^2))
+     Respuesta: [{"expr": "d/dx(√(1 - x^2))", "result": "-x/√(1 - x^2)"}]
+
+   e) Funciones trigonométricas:
+   - d/dx(sen(x^2))
+     Respuesta: [{"expr": "d/dx(sen(x^2))", "result": "2x cos(x^2)"}]
+   - d/dx(arctg(x))
+     Respuesta: [{"expr": "d/dx(arctg(x))", "result": "1/(1 + x^2)"}]
+
+Recuerda aplicar las reglas de derivación correctamente, incluyendo la regla de la cadena cuando sea necesario. Simplifica las expresiones finales cuando sea posible.
 
 Analiza la ecuación o expresión en esta imagen y devuelve la respuesta de acuerdo a las reglas dadas:
 Asegúrate de usar barras invertidas extras para caracteres de escape como \\f -> \\\\f, \\n -> \\\\n, etc.

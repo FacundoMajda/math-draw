@@ -66,37 +66,75 @@ PEMDAS significa el Orden de Prioridad: Paréntesis, Exponentes, Multiplicación
 6. **Derivadas y otros problemas de cálculo**:
    Ejemplos de derivadas más complejas:
 
-   a) Funciones racionales:
+  a) Funciones polinómicas y racionales:
+   - d/dx(27x - π)
+     Respuesta: [{"expr": "d/dx(27x - π)", "result": "27"}]
+   - d/dx(5x^2/4)
+     Respuesta: [{"expr": "d/dx(5x^2/4)", "result": "5x/2"}]
+   - d/dx(7/x)
+     Respuesta: [{"expr": "d/dx(7/x)", "result": "-7/x^2"}]
+   - d/dx(5/(2x)^3)
+     Respuesta: [{"expr": "d/dx(5/(2x)^3)", "result": "-15/(8x^4)"}]
    - d/dx(x^3/5 + 2/x^4)
      Respuesta: [{"expr": "d/dx(x^3/5 + 2/x^4)", "result": "3x^2/5 - 8/x^5"}]
    - d/dx((2x^2 - 3x + 1)/x)
      Respuesta: [{"expr": "d/dx((2x^2 - 3x + 1)/x)", "result": "(2x^2 - 1)/x^2"}]
 
-   b) Funciones con raíces:
+  b) Funciones con raíces y exponenciales:
+   - d/dx(√(2x))
+     Respuesta: [{"expr": "d/dx(√(2x))", "result": "1/√x"}]
+   - d/dx(x·2^x)
+     Respuesta: [{"expr": "d/dx(x·2^x)", "result": "2^x(1 + x·ln2)"}]
+   - d/dx(xe^x)
+     Respuesta: [{"expr": "d/dx(xe^x)", "result": "e^x(1 + x)"}]
    - d/dx(√(3x))
      Respuesta: [{"expr": "d/dx(√(3x))", "result": "1/(2√(3x))"}]
    - d/dx(∛x + ∜x)
      Respuesta: [{"expr": "d/dx(∛x + ∜x)", "result": "1/(3x^(2/3)) + 1/(4x^(3/4))"}]
 
-   c) Funciones exponenciales y logarítmicas:
+  c) Funciones trigonométricas y sus inversas:
+   - d/dx(tg^2·x^2)
+     Respuesta: [{"expr": "d/dx(tg^2·x^2)", "result": "4x·tg x^2·sec^2 x^2"}]
+   - d/dx(arccos√x)
+     Respuesta: [{"expr": "d/dx(arccos√x)", "result": "-1/(2√(x-x^2))"}]
+   - d/dx(arctg e^x)
+     Respuesta: [{"expr": "d/dx(arctg e^x)", "result": "e^x/(1+e^2x)"}]
+
+  d) Funciones compuestas y producto:
+   - d/dx((x^2+1)(2x^3-5))
+     Respuesta: [{"expr": "d/dx((x^2+1)(2x^3-5))", "result": "10x^4 + 6x^2 - 10x"}]
+   - d/dx(sen(x^3 + 3x - 1))
+     Respuesta: [{"expr": "d/dx(sen(x^3 + 3x - 1))", "result": "(3x^2 + 3)cos(x^3 + 3x - 1)"}]
+   - d/dx(cos(x^4 - x))
+     Respuesta: [{"expr": "d/dx(cos(x^4 - x))", "result": "-(4x^3 - 1)sen(x^4 - x)"}]
+
+  e) Funciones con fracciones complejas:
+   - d/dx(1/(x√x))
+     Respuesta: [{"expr": "d/dx(1/(x√x))", "result": "-3/(2x^2√x)"}]
+   - d/dx((x^3 + 3x^2 - 5x + 3)/x)
+     Respuesta: [{"expr": "d/dx((x^3 + 3x^2 - 5x + 3)/x)", "result": "(2x^2 + 3x - 3)/x^2"}]
+   - d/dx(√(x^2 + 1)/(√x^2 - 1))
+     Respuesta: [{"expr": "d/dx(√(x^2 + 1)/(√x^2 - 1))", "result": "-2x/((x^2+1)(x^2-1)^(3/2))"}]
+
+  f) Funciones exponenciales y logarítmicas:
    - d/dx(ln^3(x))
      Respuesta: [{"expr": "d/dx(ln^3(x))", "result": "3ln^2(x)/x"}]
    - d/dx(π/(5x)^2)
      Respuesta: [{"expr": "d/dx(π/(5x)^2)", "result": "-2π/(25x^3)"}]
 
-   d) Funciones compuestas:
+  g) Funciones compuestas:
    - d/dx((1 + 3x^4)^5)
      Respuesta: [{"expr": "d/dx((1 + 3x^4)^5)", "result": "60x^3(1 + 3x^4)^4"}]
    - d/dx(√(1 - x^2))
      Respuesta: [{"expr": "d/dx(√(1 - x^2))", "result": "-x/√(1 - x^2)"}]
 
-   e) Funciones trigonométricas:
+  h) Funciones trigonométricas:
    - d/dx(sen(x^2))
      Respuesta: [{"expr": "d/dx(sen(x^2))", "result": "2x cos(x^2)"}]
    - d/dx(arctg(x))
      Respuesta: [{"expr": "d/dx(arctg(x))", "result": "1/(1 + x^2)"}]
 
-Recuerda aplicar las reglas de derivación correctamente, incluyendo la regla de la cadena cuando sea necesario. Simplifica las expresiones finales cuando sea posible.
+Recuerda aplicar las reglas de derivación correctamente, incluyendo la regla de la cadena, del producto y del cociente cuando sea necesario. Simplifica las expresiones finales cuando sea posible.
 
 Analiza la ecuación o expresión en esta imagen y devuelve la respuesta de acuerdo a las reglas dadas:
 Asegúrate de usar barras invertidas extras para caracteres de escape como \\f -> \\\\f, \\n -> \\\\n, etc.
